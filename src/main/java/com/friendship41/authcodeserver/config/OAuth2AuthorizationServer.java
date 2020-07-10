@@ -1,11 +1,8 @@
 package com.friendship41.authcodeserver.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -29,7 +26,6 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
         .secret("{noop}123")
         .redirectUris("http://localhost:9000/callback")
         .authorizedGrantTypes("authorization_code", "refresh_token")
-        .accessTokenValiditySeconds(60)
         .scopes("read_profile", "read_contacts");
   }
 
