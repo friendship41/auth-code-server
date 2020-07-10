@@ -31,6 +31,6 @@ public class UserController {
   @RequestMapping("/test")
   @ResponseBody
   public Object test1() {
-    return memberRepository.findById("asd@asd");
+    return memberRepository.findAll();
   }
 }
