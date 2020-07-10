@@ -1,15 +1,19 @@
 package com.friendship41.authcodeserver.config;
 
+import com.friendship41.authcodeserver.common.MemberUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+  @Autowired
+  private MemberUserDetailsService memberUserDetailsService;
 
   @Override
   protected void configure(final HttpSecurity http) throws Exception {
@@ -18,19 +22,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-    auth.inMemoryAuthentication()
-        .withUser("temp").password("$2a$04$N9LExXkx4sRlm./UfvvVl.KRLch8S.TTLIZMG2236kGZsam9/YmO.").roles("USER");
+    auth.userDetailsService(memberUserDetailsService);
   }
 
   @Override
   @Bean
   public AuthenticationManager authenticationManagerBean() throws Exception {
     return super.authenticationManagerBean();
-  }
-
-  @Override
-  @Bean
-  public UserDetailsService userDetailsServiceBean() throws Exception {
-    return super.userDetailsServiceBean();
   }
 }

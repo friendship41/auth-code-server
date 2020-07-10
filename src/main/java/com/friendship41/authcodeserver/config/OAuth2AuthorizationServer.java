@@ -1,7 +1,9 @@
 package com.friendship41.authcodeserver.config;
 
+import com.friendship41.authcodeserver.common.MemberUserDetailsService;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,25 +29,25 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
   @Autowired
   private AuthenticationManager authenticationManager;
   @Autowired
-  private UserDetailsService userDetailsService;
+  private MemberUserDetailsService memberUserDetailsService;
 
   @Override
   public void configure(final ClientDetailsServiceConfigurer clients) throws Exception {
-    clients.jdbc(dataSource);
+    clients.jdbc(this.dataSource);
   }
 
   @Override
   public void configure(final AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
     endpoints
-        .authenticationManager(authenticationManager)
-        .userDetailsService(userDetailsService)
-        .approvalStore(approvalStore())
-        .tokenStore(tokenStore());
+        .authenticationManager(this.authenticationManager)
+        .userDetailsService(this.memberUserDetailsService)
+        .approvalStore(this.approvalStore())
+        .tokenStore(this.tokenStore());
   }
 
   @Override
   public void configure(final AuthorizationServerSecurityConfigurer security) throws Exception {
-    security.passwordEncoder(passwordEncoder());
+    security.passwordEncoder(this.passwordEncoder());
   }
 
   @Bean

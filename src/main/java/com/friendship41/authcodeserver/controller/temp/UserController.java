@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class UserController {
+
+  @Autowired
+  private MemberRepository memberRepository;
+
   @RequestMapping("/api/profile")
   public ResponseEntity<UserProfile> profile() {
     User user = (User) SecurityContextHolder
@@ -25,8 +29,15 @@ public class UserController {
     return ResponseEntity.ok(profile);
   }
 
-  @Autowired
-  private MemberRepository memberRepository;
+  @RequestMapping("/api/member")
+  @ResponseBody
+  public Object getMember() {
+    User user = (User) SecurityContextHolder
+        .getContext()
+        .getAuthentication()
+        .getPrincipal();
+    return memberRepository.findById(user.getUsername());
+  }
 
   @RequestMapping("/test")
   @ResponseBody
