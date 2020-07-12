@@ -1,7 +1,7 @@
 package com.friendship41.authcodeserver.common;
 
-import com.friendship41.authcodeserver.data.temp.Member;
-import com.friendship41.authcodeserver.data.temp.MemberRepository;
+import com.friendship41.authcodeserver.data.Member;
+import com.friendship41.authcodeserver.data.MemberRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +26,6 @@ public class MemberUserDetailsService implements UserDetailsService {
       throw new UsernameNotFoundException("No Such User");
     }
     Member member = result.get();
-
-
 
     List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
     grantedAuthorityList.add(new SimpleGrantedAuthority("USER"));

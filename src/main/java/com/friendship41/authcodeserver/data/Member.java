@@ -1,4 +1,4 @@
-package com.friendship41.authcodeserver.data.temp;
+package com.friendship41.authcodeserver.data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

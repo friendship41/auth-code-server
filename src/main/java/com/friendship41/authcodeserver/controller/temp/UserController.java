@@ -1,7 +1,6 @@
 package com.friendship41.authcodeserver.controller.temp;
 
-import com.friendship41.authcodeserver.data.temp.Member;
-import com.friendship41.authcodeserver.data.temp.MemberRepository;
+import com.friendship41.authcodeserver.data.MemberRepository;
 import com.friendship41.authcodeserver.data.temp.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

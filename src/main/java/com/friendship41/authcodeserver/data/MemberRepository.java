@@ -1,4 +1,4 @@
-package com.friendship41.authcodeserver.data.temp;
+package com.friendship41.authcodeserver.data;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
