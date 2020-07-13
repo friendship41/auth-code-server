@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="kor" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입 페이지</title>
+</head>
+<body>
+<div>
+    <div>
+        <h1>회원가입</h1>
+        <p>
+            <span>아이디(이메일): </span>
+            <input type="email" id="input_email" name="email" required autofocus>
+            <span>3~50자</span>
+        </p>
+        <p>
+            <span>비밀번호: </span>
+            <input type="password" id="input_password" name="password" required>
+            <span>8자 이상</span>
+        </p>
+        <p>
+            <span>이름: </span>
+            <input type="text" id="input_name" name="name" required>
+            <span>3~20자</span>
+        </p>
+        <button onclick="requestJoin()">회원가입</button>
+    </div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script>
+    function requestJoin() {
+        $.ajax({
+            type:'POST',
+            url:'/join',
+            contentType:'application/json',
+            data:makeRequestData()
+        }).success(function (resultJson) {
+            var resultCode = resultJson.resultCode;
+            if (resultCode === '200') {
+                alert("가입 성공!");
+                window.close();
+            }
+        });
+    }
+
+    function makeRequestData() {
+        var requestData = {};
+        requestData.email = $("#input_email").val();
+        requestData.password = $("#input_password").val();
+        requestData.name = $("#input_name").val();
+        return JSON.stringify(requestData);
+    }
+</script>
+</html>

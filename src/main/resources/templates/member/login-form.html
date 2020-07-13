@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="kor" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 페이지</title>
+</head>
+<body>
+<div>
+    <div>
+        <h1>로그인</h1>
+        <form action="/login" method="post">
+            <p>
+                <span>아이디(이메일): </span>
+                <input type="text" name="username" required autofocus>
+            </p>
+            <p>
+                <span>비밀번호: </span>
+                <input type="password" name="password" required>
+            </p>
+            <button>로그인</button>
+        </form>
+    </div>
+    <hr/>
+    <div>
+        <a href="/joinForm" target="_blank">회원가입 하시겠습니까??</a>
+    </div>
+</div>
+</body>
+</html>
