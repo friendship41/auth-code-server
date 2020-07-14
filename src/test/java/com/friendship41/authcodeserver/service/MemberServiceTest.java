@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
@@ -19,6 +20,8 @@ public class MemberServiceTest {
 
   private static Member newMember;
 
+  BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(4);
+
   @BeforeEach
   public void setUpTest() {
     this.createNewMemberFromMain();
@@ -28,13 +31,12 @@ public class MemberServiceTest {
   public void 메인홈_회원가입테스트_성공() {
     Member correctMember = Member.builder()
         .email("qwe@qwe")
-        .password("qwerasdf")
         .name("name")
         .joinFrom("main")
         .build();
     Member resultMember = memberService.joinMemberFromMain(newMember);
     assertThat(resultMember)
-        .isEqualToComparingFieldByField(correctMember);
+        .isEqualToIgnoringNullFields(correctMember);
   }
 
   private void createNewMemberFromMain() {
