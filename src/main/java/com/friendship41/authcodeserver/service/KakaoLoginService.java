@@ -1,7 +1,7 @@
 package com.friendship41.authcodeserver.service;
 
-import com.friendship41.authcodeserver.data.Member;
+import com.friendship41.authcodeserver.data.response.ProcessResultResponse;
 
 public interface KakaoLoginService {
-  Member kakaoLogin(String code, String kakaoAppkey, String kakaoRedirectUri);
+  ProcessResultResponse kakaoLogin(String code, String kakaoAppkey, String kakaoRedirectUri);
 }

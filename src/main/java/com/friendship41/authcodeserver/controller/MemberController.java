@@ -1,7 +1,8 @@
 package com.friendship41.authcodeserver.controller;
 
-import com.friendship41.authcodeserver.data.Member;
+import com.friendship41.authcodeserver.data.db.Member;
 import com.friendship41.authcodeserver.data.response.ProcessResultResponse;
+import com.friendship41.authcodeserver.data.type.JoinFromType;
 import com.friendship41.authcodeserver.service.MemberService;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -38,13 +39,13 @@ public class MemberController {
   @RequestMapping(value = "/member/{email}", method = RequestMethod.GET)
   @ResponseBody
   public ProcessResultResponse getMemberByEmail(@PathVariable("email") @NotNull @NotEmpty String email) {
-    return memberService.getMemberInfo(email);
+    return memberService.getMemberResponse(email);
   }
 
   @RequestMapping(value = "/join", method = RequestMethod.POST)
   @ResponseBody
   public ProcessResultResponse joinProcess(@RequestBody @Valid Member member) {
-    memberService.joinMemberFromMain(member);
+    memberService.joinMember(member, JoinFromType.MAIN);
 
     return new ProcessResultResponse();
   }

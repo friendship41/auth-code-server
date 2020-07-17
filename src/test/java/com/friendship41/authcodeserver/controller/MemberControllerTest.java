@@ -7,8 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.friendship41.authcodeserver.common.MemberUserDetailsService;
-import com.friendship41.authcodeserver.data.Member;
+import com.friendship41.authcodeserver.data.db.Member;
 import com.friendship41.authcodeserver.data.response.ProcessResultResponse;
+import com.friendship41.authcodeserver.data.type.JoinFromType;
 import com.friendship41.authcodeserver.service.MemberService;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +46,7 @@ public class MemberControllerTest {
         .name("qwe")
         .build();
     System.out.println(new ObjectMapper().writeValueAsString(requestMember));
-    given(memberService.joinMemberFromMain(requestMember)).willReturn(Member.builder()
+    given(memberService.joinMember(requestMember, JoinFromType.MAIN)).willReturn(Member.builder()
         .email("qwe@qwe.com")
         .password("qwerasdf")
         .name("qwe")

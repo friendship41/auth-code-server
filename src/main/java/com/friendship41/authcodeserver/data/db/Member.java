@@ -1,7 +1,9 @@
-package com.friendship41.authcodeserver.data;
+package com.friendship41.authcodeserver.data.db;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -19,6 +21,8 @@ import lombok.ToString;
 @ToString
 public class Member {
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private int memberNo;
   @NotNull
   @Size(min = 3, max = 50, message = "email은 3~50자로 입력해 주세요")
   private String email;

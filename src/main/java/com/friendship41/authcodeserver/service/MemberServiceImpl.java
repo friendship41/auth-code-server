@@ -1,9 +1,11 @@
 package com.friendship41.authcodeserver.service;
 
-import com.friendship41.authcodeserver.data.Member;
-import com.friendship41.authcodeserver.data.MemberRepository;
+import com.friendship41.authcodeserver.common.MemberUserDetailsService;
+import com.friendship41.authcodeserver.data.db.Member;
+import com.friendship41.authcodeserver.data.db.MemberRepository;
 import com.friendship41.authcodeserver.data.response.MemberResultResponse;
 import com.friendship41.authcodeserver.data.response.ProcessResultResponse;
+import com.friendship41.authcodeserver.data.type.JoinFromType;
 import java.util.Optional;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,10 +25,18 @@ public class MemberServiceImpl implements MemberService {
   private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(4);
 
   @Override
-  public Member joinMemberFromMain(final Member member) {
-    if (member.getJoinFrom() == null || member.getJoinFrom().equals("")) {
-      member.setJoinFrom("main");
+  public Member joinMember(final Member member, final JoinFromType joinFromType) {
+    switch (joinFromType) {
+      case MAIN:
+        member.setJoinFrom("MAIN");
+        break;
+      case KAKAO:
+        member.setJoinFrom("KAKAO");
+        break;
+      default:
+        return null;
     }
+
     member.setPassword(encoder.encode(member.getPassword()));
 
     return memberRepository.save(member);
@@ -51,31 +61,36 @@ public class MemberServiceImpl implements MemberService {
           ProcessResultResponse.RESULT_MESSAGE_NOT_LOGIN);
     }
 
-    Optional<Member> temp = memberRepository.findById(user.getUsername());
-    if (!temp.isPresent()) {
+    Optional<Member> member = memberRepository.findByEmail(user.getUsername());
+    if (!member.isPresent()) {
       LOG.error("가입한 유저 정보를 찾을 수 없습니다.");
       return ProcessResultResponse.makeErrorResponse(ProcessResultResponse.RESULT_CODE_RESULT_NOT_FOUND,
           ProcessResultResponse.RESULT_MESSAGE_MEMBER_NOT_FOUND);
     }
 
-    temp.get().setPassword(null);
+    member.get().setPassword(null);
     return MemberResultResponse.builder()
-        .member(temp.get())
+        .member(member.get())
         .build();
   }
 
   @Override
-  public ProcessResultResponse getMemberInfo(final String email) {
-    Optional<Member> temp = memberRepository.findById(email);
-    if (!temp.isPresent()) {
+  public ProcessResultResponse getMemberResponse(final String email) {
+    Optional<Member> member = memberRepository.findByEmail(email);
+    if (!member.isPresent()) {
       LOG.error("가입한 유저 정보를 찾을 수 없습니다.");
       return ProcessResultResponse.makeErrorResponse(ProcessResultResponse.RESULT_CODE_RESULT_NOT_FOUND,
           ProcessResultResponse.RESULT_MESSAGE_MEMBER_NOT_FOUND);
     }
 
-    temp.get().setPassword(null);
+    member.get().setPassword(null);
     return MemberResultResponse.builder()
-        .member(temp.get())
+        .member(member.get())
         .build();
+  }
+
+  @Override
+  public Member getMember(final String email) {
+    return memberRepository.findByEmail(email).isPresent() ? memberRepository.findByEmail(email).get() : null;
   }
 }

@@ -1,5 +1,6 @@
 package com.friendship41.authcodeserver.controller;
 
+import com.friendship41.authcodeserver.data.response.ProcessResultResponse;
 import com.friendship41.authcodeserver.service.KakaoLoginService;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/kakao")
@@ -29,8 +31,9 @@ public class KakaoController {
   }
 
   @RequestMapping("/oauthCode")
-  public String getKakaoAuthCode(@RequestParam(value = "code") String code) {
-    return null;
+  @ResponseBody
+  public ProcessResultResponse getKakaoAuthCode(@RequestParam(value = "code") String code) {
+    return kakaoLoginService.kakaoLogin(code, kakaoAppKey, kakaoRedirectUri);
   }
 
   @PostConstruct

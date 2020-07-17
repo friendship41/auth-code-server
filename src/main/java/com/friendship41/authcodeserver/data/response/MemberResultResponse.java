@@ -1,6 +1,6 @@
 package com.friendship41.authcodeserver.data.response;
 
-import com.friendship41.authcodeserver.data.Member;
+import com.friendship41.authcodeserver.data.db.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

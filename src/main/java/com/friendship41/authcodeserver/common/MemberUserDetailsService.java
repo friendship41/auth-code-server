@@ -1,10 +1,12 @@
 package com.friendship41.authcodeserver.common;
 
-import com.friendship41.authcodeserver.data.Member;
-import com.friendship41.authcodeserver.data.MemberRepository;
+import com.friendship41.authcodeserver.data.db.Member;
+import com.friendship41.authcodeserver.data.db.MemberRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,12 +18,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MemberUserDetailsService implements UserDetailsService {
+  private static final Log LOG = LogFactory.getLog(MemberUserDetailsService.class);
+
   @Autowired
   private MemberRepository memberRepository;
 
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-    Optional<Member> result = this.memberRepository.findById(username);
+    Optional<Member> result = this.memberRepository.findByEmail(username);
     if (!result.isPresent()) {
       throw new UsernameNotFoundException("No Such User");
     }

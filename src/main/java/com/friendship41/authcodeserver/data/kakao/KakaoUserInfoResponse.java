@@ -10,7 +10,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class KakaoUserInfo {
+public class KakaoUserInfoResponse {
   @JsonProperty
   private boolean secure_resource;
   @JsonProperty
