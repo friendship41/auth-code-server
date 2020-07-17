@@ -1,11 +1,13 @@
 package com.friendship41.authcodeserver.service;
 
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import com.friendship41.authcodeserver.data.db.KakaoMemberRepository;
 import com.friendship41.authcodeserver.data.db.Member;
 import com.friendship41.authcodeserver.data.db.MemberRepository;
 import com.friendship41.authcodeserver.data.response.ProcessResultResponse;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.client.MockRestServiceServer;
 
@@ -52,6 +55,14 @@ class KakaoLoginServiceImplTest {
         .andRespond(
             withSuccess(resourceLoader.getResource("classpath:test_JSON/res_kakao_userinfo.json"),
                 MediaType.APPLICATION_JSON));
+    given(memberRepository.findByEmail("123456789"))
+        .willReturn(Optional.of(Member.builder()
+            .memberNo(1)
+            .email("123456789")
+            .name("qwe")
+            .password("asd")
+            .joinFrom("KAKAO")
+            .build()));
 
     Member member = kakaoLoginService.kakaoLogin("ABCDE", "qwe",
         "http://localhost:42222/kakao/oauthCode");
