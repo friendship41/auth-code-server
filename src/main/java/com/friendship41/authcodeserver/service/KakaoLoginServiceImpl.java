@@ -18,6 +18,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -42,7 +43,7 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
   }
 
   @Override
-  public ProcessResultResponse kakaoLogin(final String code, String kakaoAppkey, String kakaoRedirectUri) {
+  public Member kakaoLogin(final String code, String kakaoAppkey, String kakaoRedirectUri) {
     HttpEntity<MultiValueMap<String, String>> request = this.buildKakaoOauthRequest(code, kakaoAppkey, kakaoRedirectUri);
     KakaoTokenResponse kakaoTokenResponse = null;
     try {
@@ -50,16 +51,12 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
           KakaoTokenResponse.class);
     } catch (URISyntaxException e) {
       LOG.error(e);
-      return ProcessResultResponse.makeErrorResponse(
-          ProcessResultResponse.RESULT_CODE_SERVER_ERROR,
-          ProcessResultResponse.RESULT_MESSAGE_NOT_VALID_KAKAO_URI
-      );
+      return null;
     }
 
     if (kakaoTokenResponse == null) {
-      return ProcessResultResponse.makeErrorResponse(
-          ProcessResultResponse.RESULT_CODE_SERVER_ERROR,
-          ProcessResultResponse.RESULT_MESSAGE_SERVER_ERROR);
+      LOG.error(ProcessResultResponse.RESULT_MESSAGE_NOT_VALID_KAKAO_URI);
+      return null;
     }
 
     request = this.buildKakaoGetUserInfoRequest(kakaoTokenResponse);
@@ -69,28 +66,26 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
           KakaoUserInfoResponse.class);
     } catch (URISyntaxException e) {
       LOG.error(e);
-      return ProcessResultResponse.makeErrorResponse(
-          ProcessResultResponse.RESULT_CODE_SERVER_ERROR,
-          ProcessResultResponse.RESULT_MESSAGE_NOT_VALID_KAKAO_URI
-      );
+      return null;
     }
 
     if (kakaoUserInfoResponse == null) {
-      return ProcessResultResponse.makeErrorResponse(
-          ProcessResultResponse.RESULT_CODE_SERVER_ERROR,
-          ProcessResultResponse.RESULT_MESSAGE_SERVER_ERROR);
+      LOG.error(ProcessResultResponse.RESULT_MESSAGE_NOT_VALID_KAKAO_URI);
+      return null;
     }
 
     Member dbMember = memberService.getMember(String.valueOf(kakaoUserInfoResponse.getId()));
-    System.out.println(kakaoUserInfoResponse);
+    String newPassword = UUID.randomUUID().toString();
     if (dbMember == null) {
       Member member = Member.builder()
           .email(String.valueOf(kakaoUserInfoResponse.getId()))
           .name(kakaoUserInfoResponse.getKakao_account().getProfile().getNickname())
           .joinFrom(JoinFromType.KAKAO.toString())
-          .password(UUID.randomUUID().toString())
+          .password(newPassword)
           .build();
       dbMember = memberService.joinMember(member, JoinFromType.KAKAO);
+    } else {
+      dbMember.setPassword(new BCryptPasswordEncoder(4).encode(newPassword));
     }
 
     KakaoMember kakaoMember = KakaoMember.builder()
@@ -100,8 +95,12 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
         .build();
     kakaoMemberRepository.save(kakaoMember);
 
-    return MemberResultResponse.builder()
-        .member(dbMember)
+    return Member.builder()
+        .memberNo(dbMember.getMemberNo())
+        .password(newPassword)
+        .joinFrom(dbMember.getJoinFrom())
+        .email(dbMember.getEmail())
+        .name(dbMember.getName())
         .build();
   }
 

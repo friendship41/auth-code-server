@@ -3,6 +3,7 @@ package com.friendship41.authcodeserver.service;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import com.friendship41.authcodeserver.data.db.KakaoMemberRepository;
+import com.friendship41.authcodeserver.data.db.Member;
 import com.friendship41.authcodeserver.data.db.MemberRepository;
 import com.friendship41.authcodeserver.data.response.ProcessResultResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,9 +53,9 @@ class KakaoLoginServiceImplTest {
             withSuccess(resourceLoader.getResource("classpath:test_JSON/res_kakao_userinfo.json"),
                 MediaType.APPLICATION_JSON));
 
-    ProcessResultResponse response = kakaoLoginService.kakaoLogin("ABCDE", "qwe",
+    Member member = kakaoLoginService.kakaoLogin("ABCDE", "qwe",
         "http://localhost:42222/kakao/oauthCode");
-    System.out.println(response);
+    System.out.println(member);
   }
 
 
