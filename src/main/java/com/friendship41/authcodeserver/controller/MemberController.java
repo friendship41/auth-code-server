@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -36,10 +37,20 @@ public class MemberController {
     return memberService.getLogginedMember();
   }
 
-  @RequestMapping(value = "/member/{email}", method = RequestMethod.GET)
+  @RequestMapping(value = "/member", method = RequestMethod.GET)
   @ResponseBody
-  public ProcessResultResponse getMemberByEmail(@PathVariable("email") @NotNull @NotEmpty String email) {
-    return memberService.getMemberResponse(email);
+  public ProcessResultResponse getMemberByEmail(
+      @RequestParam("getBy") String getBy,
+      @RequestParam(value = "email", required = false) String email,
+      @RequestParam(value = "memberNo", required = false) int memberNo) {
+    if (getBy.equalsIgnoreCase("memberNo")) {
+      return memberService.getMemberResponse(memberNo);
+    } else if (getBy.equalsIgnoreCase("email")) {
+      return memberService.getMemberResponse(email);
+    }
+    return ProcessResultResponse.makeErrorResponse(
+        ProcessResultResponse.RESULT_CODE_BAD_REQUEST,
+        ProcessResultResponse.RESULT_MESSAGE_BAD_REQUEST);
   }
 
   @RequestMapping(value = "/join", method = RequestMethod.POST)

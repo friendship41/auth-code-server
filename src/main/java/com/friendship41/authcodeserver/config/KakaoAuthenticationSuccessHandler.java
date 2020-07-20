@@ -29,6 +29,10 @@ public class KakaoAuthenticationSuccessHandler implements AuthenticationSuccessH
         && httpServletRequest.getParameter("isKakao").equals("true")) {
       memberService.changePassword(httpServletRequest.getParameter("username"), UUID.randomUUID().toString());
     }
-    httpServletResponse.sendRedirect(savedRequest.getRedirectUrl());
+    try {
+      httpServletResponse.sendRedirect(savedRequest.getRedirectUrl());
+    } catch (NullPointerException e) {
+      httpServletResponse.sendRedirect("/error");
+    }
   }
 }

@@ -75,6 +75,20 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  public ProcessResultResponse getMemberResponse(final int memberNo) {
+    Optional<Member> optionalMember = memberRepository.findById(memberNo);
+    if (!optionalMember.isPresent()) {
+      return ProcessResultResponse.makeErrorResponse(
+          ProcessResultResponse.RESULT_CODE_RESULT_NOT_FOUND,
+          ProcessResultResponse.RESULT_MESSAGE_MEMBER_NOT_FOUND);
+    }
+    optionalMember.get().setPassword(null);
+    return MemberResultResponse.builder()
+        .member(optionalMember.get())
+        .build();
+  }
+
+  @Override
   public ProcessResultResponse getMemberResponse(final String email) {
     Optional<Member> member = memberRepository.findByEmail(email);
     if (!member.isPresent()) {
