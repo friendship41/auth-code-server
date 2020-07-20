@@ -1,20 +1,14 @@
 package com.friendship41.authcodeserver.controller;
 
 import com.friendship41.authcodeserver.data.db.Member;
-import com.friendship41.authcodeserver.data.response.ProcessResultResponse;
 import com.friendship41.authcodeserver.service.KakaoLoginService;
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(value = "/kakao")
@@ -37,12 +31,14 @@ public class KakaoController {
   }
 
   @RequestMapping("/oauthCode")
-  public String getKakaoAuthCode(@RequestParam(value = "code") String code) {
+  public String getKakaoAuthCode(@RequestParam(value = "code") String code, Model model) {
     Member member = kakaoLoginService.kakaoLogin(code, kakaoAppKey, kakaoRedirectUri);
     if (member == null) {
       return "/errorPage";
     } else {
-      return "/member/kakao-login?id="+member.getEmail()+"&code="+member.getPassword();
+      model.addAttribute("id", member.getEmail());
+      model.addAttribute("code", member.getPassword());
+      return "/member/kakao-login";
     }
   }
 

@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kor" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>asd</title>
 </head>
-<body>
-
+<body onload="login()">
+<form name="loginForm" action="/login" method="post">
+    <input type="hidden" name="username" th:value="${id}">
+    <input type="hidden" name="password" th:value="${code}">
+    <input type="hidden" name="isKakao" value="true">
+</form>
 </body>
+<script>
+    function login() {
+        document.loginForm.submit();
+    }
+</script>
 </html>

@@ -5,7 +5,6 @@ import com.friendship41.authcodeserver.data.db.KakaoMemberRepository;
 import com.friendship41.authcodeserver.data.db.Member;
 import com.friendship41.authcodeserver.data.kakao.KakaoTokenResponse;
 import com.friendship41.authcodeserver.data.kakao.KakaoUserInfoResponse;
-import com.friendship41.authcodeserver.data.response.MemberResultResponse;
 import com.friendship41.authcodeserver.data.response.ProcessResultResponse;
 import com.friendship41.authcodeserver.data.type.JoinFromType;
 import java.net.URI;

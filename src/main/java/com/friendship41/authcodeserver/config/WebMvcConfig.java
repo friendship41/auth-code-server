@@ -1,6 +1,5 @@
 package com.friendship41.authcodeserver.config;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;

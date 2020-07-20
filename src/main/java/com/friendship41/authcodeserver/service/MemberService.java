@@ -9,4 +9,5 @@ public interface MemberService {
   ProcessResultResponse getLogginedMember();
   ProcessResultResponse getMemberResponse(String email);
   Member getMember(String email);
+  Member changePassword(String email, String password);
 }

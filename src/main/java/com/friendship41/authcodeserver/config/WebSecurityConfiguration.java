@@ -34,6 +34,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .formLogin()
         .loginPage("/loginForm")
         .loginProcessingUrl("/login")
+        .successHandler(this.kakaoAuthenticationSuccessHandler())
         .and()
         .csrf().disable();
   }
@@ -47,5 +48,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Bean
   public AuthenticationManager authenticationManagerBean() throws Exception {
     return super.authenticationManagerBean();
+  }
+
+  @Bean
+  public KakaoAuthenticationSuccessHandler kakaoAuthenticationSuccessHandler() {
+    return new KakaoAuthenticationSuccessHandler();
   }
 }

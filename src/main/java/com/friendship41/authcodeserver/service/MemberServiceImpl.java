@@ -93,4 +93,15 @@ public class MemberServiceImpl implements MemberService {
   public Member getMember(final String email) {
     return memberRepository.findByEmail(email).isPresent() ? memberRepository.findByEmail(email).get() : null;
   }
+
+  @Override
+  public Member changePassword(final String email, final String password) {
+    Optional<Member> optionalMember = memberRepository.findByEmail(email);
+    if (!optionalMember.isPresent()) {
+      return null;
+    }
+    Member member = optionalMember.get();
+    member.setPassword(encoder.encode(password));
+    return member;
+  }
 }
