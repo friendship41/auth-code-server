@@ -1,6 +1,5 @@
 package com.friendship41.authcodeserver.data.db;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

@@ -1,6 +1,5 @@
 package com.friendship41.authcodeserver.service;
 
-import com.friendship41.authcodeserver.common.MemberUserDetailsService;
 import com.friendship41.authcodeserver.data.db.Member;
 import com.friendship41.authcodeserver.data.db.MemberRepository;
 import com.friendship41.authcodeserver.data.response.MemberResultResponse;
