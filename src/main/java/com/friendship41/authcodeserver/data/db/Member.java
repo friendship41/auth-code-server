@@ -21,7 +21,7 @@ import lombok.ToString;
 @ToString
 public class Member {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int memberNo;
   @NotNull
   @Size(min = 3, max = 50, message = "email은 3~50자로 입력해 주세요")
