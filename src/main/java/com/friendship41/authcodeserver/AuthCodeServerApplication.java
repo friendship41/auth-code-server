@@ -11,4 +11,5 @@ public class AuthCodeServerApplication {
   }
   // TODO: 로그파일 잘 떨어지게 만들어야함
   // TODO: Error 페이지 구성
+  // TODO: 로그아웃 구현
 }
