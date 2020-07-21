@@ -10,8 +10,6 @@ import com.friendship41.authcodeserver.data.type.JoinFromType;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -22,10 +20,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service("KakaoService")
 public class KakaoLoginServiceImpl implements KakaoLoginService {
-  private static final Log LOG = LogFactory.getLog(KakaoLoginServiceImpl.class);
 
   private static final String URI_KAKAO_OAUTH_TOKEN_CODE = "https://kauth.kakao.com/oauth/token";
   private static final String URI_KAKAO_GET_USER_INFO = "https://kapi.kakao.com/v2/user/me";
@@ -49,12 +48,12 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
       kakaoTokenResponse = restTemplate.postForObject(new URI(URI_KAKAO_OAUTH_TOKEN_CODE), request,
           KakaoTokenResponse.class);
     } catch (URISyntaxException e) {
-      LOG.error(e);
+      log.error("kakaoLogin(final String code, String kakaoAppkey, String kakaoRedirectUri)" , e);
       return null;
     }
 
     if (kakaoTokenResponse == null) {
-      LOG.error(ProcessResultResponse.RESULT_MESSAGE_NOT_VALID_KAKAO_URI);
+      log.error(ProcessResultResponse.RESULT_MESSAGE_NOT_VALID_KAKAO_URI);
       return null;
     }
 
@@ -64,12 +63,12 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
       kakaoUserInfoResponse = restTemplate.postForObject(new URI(URI_KAKAO_GET_USER_INFO), request,
           KakaoUserInfoResponse.class);
     } catch (URISyntaxException e) {
-      LOG.error(e);
+      log.error("kakaoLogin(final String code, String kakaoAppkey, String kakaoRedirectUri)" ,e);
       return null;
     }
 
     if (kakaoUserInfoResponse == null) {
-      LOG.error(ProcessResultResponse.RESULT_MESSAGE_NOT_VALID_KAKAO_URI);
+      log.error(ProcessResultResponse.RESULT_MESSAGE_NOT_VALID_KAKAO_URI);
       return null;
     }
 
