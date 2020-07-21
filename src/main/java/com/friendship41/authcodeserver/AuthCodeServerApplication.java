@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootApplication
 public class AuthCodeServerApplication {
 
+
   public static void main(String[] args) {
     SpringApplication.run(AuthCodeServerApplication.class, args);
   }
