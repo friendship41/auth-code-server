@@ -16,6 +16,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
 @EnableAuthorizationServer
@@ -39,17 +41,13 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
         .authenticationManager(this.authenticationManager)
         .userDetailsService(this.memberUserDetailsService)
         .approvalStore(this.approvalStore())
-        .tokenStore(this.tokenStore());
+        .tokenStore(this.jwtTokenStore())
+        .accessTokenConverter(this.accessTokenConverter());
   }
 
   @Override
   public void configure(final AuthorizationServerSecurityConfigurer security) throws Exception {
     security.passwordEncoder(this.passwordEncoder());
-  }
-
-  @Bean
-  public TokenStore tokenStore() {
-    return new OAuth2JdbcTokenStore(dataSource);
   }
 
   @Bean
@@ -60,5 +58,17 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder(4);
+  }
+
+  @Bean
+  public JwtAccessTokenConverter accessTokenConverter() {
+    JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+    converter.setSigningKey("1q2w3e");
+    return converter;
+  }
+
+  @Bean
+  public JwtTokenStore jwtTokenStore() {
+    return new JwtTokenStore(accessTokenConverter());
   }
 }
